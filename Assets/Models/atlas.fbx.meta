@@ -1,48 +1,52 @@
 fileFormatVersion: 2
-guid: 1f20b02bdca397242b9b3f2e75a72bd7
+guid: 3f9459e03e409ed4a9e1e1dde2e0f7d2
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: Armature
-    100002: armLower_L
-    100004: armLower_R
-    100006: armUpper_L
-    100008: armUpper_R
-    100010: //RootNode
-    100012: Camera
-    100014: chest
+    100002: //RootNode
+    100004: Camera
+    100006: chest
+    100008: foot_L
+    100010: foot_R
+    100012: hand_L
+    100014: hand_R
     100016: head
-    100018: hip_L
-    100020: hip_R
-    100022: Lamp
-    100024: leg_L
-    100026: leg_R
-    100028: pelvic
-    100030: shoulder_L
-    100032: shoulder_R
+    100018: Hip
+    100020: Lamp
+    100022: leg_L
+    100024: leg_R
+    100026: lowerArm_L
+    100028: lowerArm_R
+    100030: shoulder_R
+    100032: shoulder_R_0
     100034: Sphere
     100036: thigh_L
     100038: thigh_R
+    100040: upperArm_L
+    100042: upperArm_R
     400000: Armature
-    400002: armLower_L
-    400004: armLower_R
-    400006: armUpper_L
-    400008: armUpper_R
-    400010: //RootNode
-    400012: Camera
-    400014: chest
+    400002: //RootNode
+    400004: Camera
+    400006: chest
+    400008: foot_L
+    400010: foot_R
+    400012: hand_L
+    400014: hand_R
     400016: head
-    400018: hip_L
-    400020: hip_R
-    400022: Lamp
-    400024: leg_L
-    400026: leg_R
-    400028: pelvic
-    400030: shoulder_L
-    400032: shoulder_R
+    400018: Hip
+    400020: Lamp
+    400022: leg_L
+    400024: leg_R
+    400026: lowerArm_L
+    400028: lowerArm_R
+    400030: shoulder_R
+    400032: shoulder_R_0
     400034: Sphere
     400036: thigh_L
     400038: thigh_R
+    400040: upperArm_L
+    400042: upperArm_R
     4300000: Sphere
     7400000: Default Take
     9500000: //RootNode
