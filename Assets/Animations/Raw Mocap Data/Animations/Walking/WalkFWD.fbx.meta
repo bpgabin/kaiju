@@ -158,6 +158,11 @@ ModelImporter:
     400150: TongueBack
     400152: TongueTip
     7400000: WalkFWD
+    7400002: RobotRightStep
+    7400004: RobotLeftStep
+    7400006: RobotLeftStepStill
+    7400008: RobotLeftStepComplete
+    7400010: RobotRightStill
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -174,14 +179,14 @@ ModelImporter:
     clipAnimations:
     - name: WalkFWD
       takeName: _1_Edit1_WalkFWD
-      firstFrame: 0
-      lastFrame: 90
+      firstFrame: 31
+      lastFrame: 46
       wrapMode: 0
-      orientationOffsetY: 0
+      orientationOffsetY: 1.55999994
       level: 0
       cycleOffset: 0
       loop: 0
-      loopBlend: 1
+      loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
@@ -189,6 +194,90 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    - name: RobotRightStep
+      takeName: _1_Edit1_WalkFWD
+      firstFrame: 16
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 4.80999994
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    - name: RobotLeftStep
+      takeName: _1_Edit1_WalkFWD
+      firstFrame: 30
+      lastFrame: 41
+      wrapMode: 0
+      orientationOffsetY: .889999986
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    - name: RobotLeftStepStill
+      takeName: _1_Edit1_WalkFWD
+      firstFrame: 40.9000015
+      lastFrame: 41
+      wrapMode: 0
+      orientationOffsetY: 5.48000002
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    - name: RobotRightStill
+      takeName: _1_Edit1_WalkFWD
+      firstFrame: 30
+      lastFrame: 30.1000004
+      wrapMode: 0
+      orientationOffsetY: 2.71000004
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []

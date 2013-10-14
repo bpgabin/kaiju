@@ -26,10 +26,10 @@ public class MoveJoints : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKey(KeyCode.W)){
+		if(Input.GetKey(KeyCode.Z)){
 			changeAngle(leftThigh, speed * Time.deltaTime, 0, 0);
 			changeAngle(leftKnee, -speed * Time.deltaTime, 0, 0);
-			changeAngle(hip, speed * Time.deltaTime, 0, 0);
+			changeAngle(rightUpperArm, -speed * Time.deltaTime, 0, 0);
 		}
 	}
 	
