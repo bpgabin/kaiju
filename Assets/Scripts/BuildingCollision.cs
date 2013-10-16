@@ -8,6 +8,7 @@ public class BuildingCollision : MonoBehaviour {
 			collider.enabled = false;
 			renderer.enabled = false;
 			particleSystem.Play();
+			audio.Play();
 		}
 	}
 }
