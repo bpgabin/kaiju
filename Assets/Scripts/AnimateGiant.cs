@@ -2,36 +2,31 @@
 using System.Collections;
 
 public class AnimateGiant : MonoBehaviour {
-	Animator anim;
+	public AudioSource[] audioSources;
 	
-	public AudioSource[] aSources;
-	AudioSource audio1;
-	AudioSource audio2;
+	Animator anim;
+	AudioSource soundHydraulic;
+	AudioSource soundFootstep;
 	
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-		anim.speed = 0.25f;
 		
-		audio1 = aSources[0];
-		audio2 = aSources[1];
+		soundHydraulic = audioSources[0];
+		soundFootstep = audioSources[1];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		// Get the current animation state.
-		AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(1);
-		
-		if(	stateInfo.nameHash == Animator.StringToHash("Legs.Idle") || 
-			stateInfo.nameHash == Animator.StringToHash("Legs.RobotLeftStepStill") ||
-		   	stateInfo.nameHash == Animator.StringToHash("Legs.RobotRightStepStill")){
-			if(Input.GetKeyDown(KeyCode.Q)){
-				anim.SetBool("LeftStep", true);
-				audio1.Play();
-			}
-			if(Input.GetKeyDown(KeyCode.W)){
-				anim.SetBool("RightStep", true);
-			}
+		if(Input.GetKeyDown(KeyCode.Q)){
+			anim.SetBool("LeftStep", true);
+			soundHydraulic.Play();
+			soundFootstep.PlayDelayed(0.9f);
+		}
+		else if(Input.GetKeyDown(KeyCode.W)){
+			anim.SetBool("RightStep", true);
+			soundHydraulic.Play();
+			soundFootstep.PlayDelayed(0.9f);
 		}
 		else{
 			anim.SetBool("LeftStep", false);

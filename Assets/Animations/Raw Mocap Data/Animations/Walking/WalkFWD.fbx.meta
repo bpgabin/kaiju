@@ -162,7 +162,7 @@ ModelImporter:
     7400004: RobotLeftStep
     7400006: RobotLeftStepStill
     7400008: RobotLeftStepComplete
-    7400010: RobotRightStill
+    7400010: RobotRightStepStill
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -200,8 +200,8 @@ ModelImporter:
       transformMask: []
     - name: RobotRightStep
       takeName: _1_Edit1_WalkFWD
-      firstFrame: 16
-      lastFrame: 30
+      firstFrame: 47
+      lastFrame: 57
       wrapMode: 0
       orientationOffsetY: 4.80999994
       level: 0
@@ -261,12 +261,12 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       transformMask: []
-    - name: RobotRightStill
+    - name: RobotRightStepStill
       takeName: _1_Edit1_WalkFWD
-      firstFrame: 30
-      lastFrame: 30.1000004
+      firstFrame: 56.9000015
+      lastFrame: 57
       wrapMode: 0
-      orientationOffsetY: 2.71000004
+      orientationOffsetY: 2.63000011
       level: 0
       cycleOffset: 0
       loop: 0
