@@ -2,9 +2,11 @@
 using System.Collections;
 
 public class BuildingCollision : MonoBehaviour {
-
+	public float minMult = 0.75f;
+	public float maxMult = 1.75f;
+	
 	void Start(){
-		float heightMult = Random.Range(0.75f, 1.75f);
+		float heightMult = Random.Range(minMult, maxMult);
 		transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * heightMult, transform.localScale.z);
 	}
 	
