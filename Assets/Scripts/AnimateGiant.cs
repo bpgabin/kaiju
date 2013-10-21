@@ -14,7 +14,7 @@ public class AnimateGiant : MonoBehaviour {
 	int lastRunButton = -1;
 	
 	float lastStepTime = -1f;
-	float cadenceTime = 1.0f;
+	float cadenceTime = 0.25f;
 	float startRunTime = 3.0f;
 	
 	RagdollHelper helper;
@@ -27,6 +27,18 @@ public class AnimateGiant : MonoBehaviour {
 		soundFootstep = audioSources[1];
 		
 		helper = GetComponent<RagdollHelper>();
+		
+		//Now cast a ray from the computed position downwards and find the highest hit
+		Vector3 newPosition = transform.position;
+		RaycastHit[] hits = Physics.RaycastAll(new Ray(newPosition, Vector3.down)); 
+		newPosition.y = -100f;
+		foreach(RaycastHit hit in hits){
+			if (!hit.transform.IsChildOf(transform)){
+				newPosition.y = Mathf.Max(newPosition.y, hit.point.y);
+			}
+		}
+		
+		transform.position = newPosition;
 	}
 	
 	// Update is called once per frame
@@ -71,9 +83,10 @@ public class AnimateGiant : MonoBehaviour {
 					}
 				}
 				else if(running){
+					if(Time.time - lastStepTime > cadenceTime)
+						helper.ragdolled = true;
 					running = false;
 					anim.SetBool("Running", false);
-					helper.ragdolled = true;
 				}
 				else if(Input.GetKey(KeyCode.W))
 					anim.SetFloat("Turning", -1.0f);
