@@ -31,11 +31,8 @@ public class CarAI : MonoBehaviour {
 				break;
 				
 				
-			case Intersection.intersectionTypes.turnRight:
+			case Intersection.intersectionTypes.turn:
 				transform.Rotate(new Vector3(0, 90, 0));
-				break;
-			case Intersection.intersectionTypes.turnLeft:
-				transform.Rotate(new Vector3(0, -90, 0));
 				break;
 			}
 		}
