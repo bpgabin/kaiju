@@ -16,7 +16,7 @@ public class ThirdPersonCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate() {
-		if(Input.GetMouseButton(0)){
+		if(Time.timeScale != 0 && Input.GetMouseButton(0)){
 			float horizontal = Input.GetAxis("Mouse X") * rotateSpeed;
 			rotation = Quaternion.Euler(0, rotation.eulerAngles.y + horizontal, 0);
 		}

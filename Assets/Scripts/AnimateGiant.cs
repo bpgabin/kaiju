@@ -4,6 +4,7 @@ using System.Collections;
 public class AnimateGiant : MonoBehaviour {
 	public AudioSource[] audioSources;
 	
+	GameStats stats;
 	Animator anim;
 	AudioSource soundHydraulic;
 	AudioSource soundFootstep;
@@ -19,6 +20,7 @@ public class AnimateGiant : MonoBehaviour {
 	float lastStepTime = -1f;
 	float cadenceTime = 0.25f;
 	float startRunTime = 3.0f;
+	float timeWhenRunStarted = 0;
 	
 	RagdollHelper helper;
 	
@@ -33,6 +35,8 @@ public class AnimateGiant : MonoBehaviour {
 		soundPowerUp = audioSources[4];
 		
 		helper = GetComponent<RagdollHelper>();
+		
+		stats = GameObject.Find("GameStats").GetComponent<GameStats>();
 		
 		//Now cast a ray from the computed position downwards and find the highest hit
 		Vector3 newPosition = transform.position;
@@ -79,6 +83,7 @@ public class AnimateGiant : MonoBehaviour {
 						running = true;
 						anim.SetBool("Running", true);
 						lastRunButton = 1;
+						timeWhenRunStarted = Time.time;
 					}
 					else if(running && lastRunButton == 2 && (Time.time - lastStepTime <= cadenceTime)){
 						lastRunButton = 1;	
@@ -88,6 +93,8 @@ public class AnimateGiant : MonoBehaviour {
 						anim.SetBool("Running", false);
 						helper.ragdolled = true;
 						soundPowerDown.Play();
+						stats.increaseTimesFallen();
+						stats.checkRunTime(Time.time - timeWhenRunStarted);
 					}
 				}
 				else if(running){
@@ -95,6 +102,7 @@ public class AnimateGiant : MonoBehaviour {
 						helper.ragdolled = true;
 					running = false;
 					anim.SetBool("Running", false);
+					stats.checkRunTime(Time.time - timeWhenRunStarted);
 				}
 				else if(Input.GetKey(KeyCode.W))
 					anim.SetFloat("Turning", -1.0f);
@@ -118,6 +126,7 @@ public class AnimateGiant : MonoBehaviour {
 						running = true;
 						anim.SetBool("Running", true);
 						lastRunButton = 2;
+						timeWhenRunStarted = Time.time;
 					}
 					else if(running && lastRunButton == 1 && (Time.time - lastStepTime <= cadenceTime)){
 						lastRunButton = 2;	
@@ -127,6 +136,8 @@ public class AnimateGiant : MonoBehaviour {
 						anim.SetBool("Running", false);
 						helper.ragdolled = true;
 						soundPowerDown.Play();
+						stats.increaseTimesFallen();
+						stats.checkRunTime(Time.time - timeWhenRunStarted);
 					}
 				}
 				else if(Input.GetKey(KeyCode.W))
@@ -150,6 +161,8 @@ public class AnimateGiant : MonoBehaviour {
 				anim.SetBool("Running", false);
 				helper.ragdolled = true;
 				soundPowerDown.Play();
+				stats.increaseTimesFallen();
+				stats.checkRunTime(Time.time - timeWhenRunStarted);
 			}
 		}
 		else{

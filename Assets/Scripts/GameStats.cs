@@ -8,28 +8,28 @@ public class GameStats : MonoBehaviour {
 	float longestRun = -1.0f;
 	
 	// Accessors
-	int getBuildingsDestroyed(){
+	public int getBuildingsDestroyed(){
 		return buildingsDestroyed;	
 	}
 	
-	int getTimesFallen(){
+	public int getTimesFallen(){
 		return timesFallen;
 	}
 	
-	float getLongestRun(){
-		return longestRun;	
+	public float getLongestRun(){
+		return longestRun;
 	}
 	
 	// Modifiers
-	void increaseBuildingsDestroyed(){
+	public void increaseBuildingsDestroyed(){
 		buildingsDestroyed++;	
 	}
 	
-	void increaseTimesFallen(){
+	public void increaseTimesFallen(){
 		timesFallen++;	
 	}
 	
-	void checkRunTime(float runTime){
+	public void checkRunTime(float runTime){
 		if(runTime > longestRun){
 			longestRun = runTime;	
 		}
