@@ -179,21 +179,21 @@ ModelImporter:
     clipAnimations:
     - name: WalkFWD
       takeName: _1_Edit1_WalkFWD
-      firstFrame: 31
+      firstFrame: 16
       lastFrame: 46
       wrapMode: 0
-      orientationOffsetY: 1.55999994
+      orientationOffsetY: 3.92000008
       level: 0
       cycleOffset: 0
       loop: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 0
+      keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
-      heightFromFeet: 1
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -245,14 +245,14 @@ ModelImporter:
       firstFrame: 40.9000015
       lastFrame: 41
       wrapMode: 0
-      orientationOffsetY: 5.48000002
+      orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
@@ -266,7 +266,7 @@ ModelImporter:
       firstFrame: 56.9000015
       lastFrame: 57
       wrapMode: 0
-      orientationOffsetY: 2.63000011
+      orientationOffsetY: 1.27999997
       level: 0
       cycleOffset: 0
       loop: 0

@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour {
 	
 	enum menuState {mainMenu, optionsMenu, credits, pauseMenu, pauseOptions, game};
 	menuState currentState = menuState.mainMenu;
+	string lastTooltip = "";
 	
 	void Start(){
 		if(gameScene != gameScenes.none){
@@ -39,23 +40,23 @@ public class MainMenu : MonoBehaviour {
 				GUILayout.BeginVertical();
 					GUILayout.Box("KAIJU");
 					GUILayout.BeginHorizontal();
-					if(GUILayout.Button("Robot")){
+					if(GUILayout.Button(new GUIContent("Robot", "Button"))){
 						Application.LoadLevel("Neo_Tokyo");	
 					}
-					if(GUILayout.Button("Monster")){
+					if(GUILayout.Button(new GUIContent("Monster", "Button"))){
 				
 					}
 				GUILayout.EndHorizontal();
 				GUILayout.BeginHorizontal();
 					GUILayout.FlexibleSpace();
-					if(GUILayout.Button("Options", GUILayout.Width(100))){
+					if(GUILayout.Button(new GUIContent("Options", "Button"), GUILayout.Width(100))){
 						currentState = menuState.optionsMenu;
 					}
 				GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();
 				GUILayout.FlexibleSpace();
-				if(GUILayout.Button("Credits", GUILayout.Width(100))){
+				if(GUILayout.Button(new GUIContent("Credits", "Button"), GUILayout.Width(100))){
 					currentState = menuState.credits;
 				}
 				GUILayout.FlexibleSpace();
@@ -76,7 +77,7 @@ public class MainMenu : MonoBehaviour {
 			AudioListener.volume = GUILayout.HorizontalSlider(AudioListener.volume, 0.0f, 1.0f);
 			GUILayout.BeginHorizontal();
 				GUILayout.FlexibleSpace();
-				if(GUILayout.Button("Main Menu"))
+				if(GUILayout.Button(new GUIContent("Main Menu", "Button")))
 					currentState = menuState.mainMenu;
 				GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
@@ -87,7 +88,7 @@ public class MainMenu : MonoBehaviour {
 			break;
 		case menuState.game:
 			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 25, 50, 20));
-				if(GUILayout.Button("Menu")){
+				if(GUILayout.Button(new GUIContent("Menu", "Button"))){
 					Time.timeScale = 0;
 					currentState = menuState.pauseMenu;
 				}
@@ -113,14 +114,14 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height - 200, 200, 400));
 				GUILayout.BeginVertical();	
 					GUILayout.Box("Paused");
-					if(GUILayout.Button("Resume")){
+					if(GUILayout.Button(new GUIContent("Resume", "Button"))){
 						Time.timeScale = 1;
 						currentState= menuState.game;
 					}
 					if(GUILayout.Button("Options")){
 						currentState = menuState.pauseOptions;
 					}
-					if(GUILayout.Button("Main Menu")){
+					if(GUILayout.Button(new GUIContent("Main Menu", "Button"))){
 						Time.timeScale = 1;
 						Application.LoadLevel("MainMenu");
 					}
@@ -139,7 +140,7 @@ public class MainMenu : MonoBehaviour {
 					AudioListener.volume = GUILayout.HorizontalSlider(AudioListener.volume, 0.0f, 1.0f);
 					GUILayout.BeginHorizontal();
 						GUILayout.FlexibleSpace();
-						if(GUILayout.Button("Go Back"))
+						if(GUILayout.Button(new GUIContent("Go Back", "Button")))
 							currentState = menuState.pauseMenu;
 						GUILayout.FlexibleSpace();
 					GUILayout.EndHorizontal();
@@ -147,5 +148,19 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.EndArea();
 			break;
 		}
+		
+		 if(Event.current.type == EventType.Repaint && GUI.tooltip != lastTooltip) {
+            if (lastTooltip != "")
+                SendMessage(lastTooltip + "OnMouseOut", SendMessageOptions.DontRequireReceiver);
+            
+            if (GUI.tooltip != "")
+                SendMessage(GUI.tooltip + "OnMouseOver", SendMessageOptions.DontRequireReceiver);
+            
+            lastTooltip = GUI.tooltip;
+        }
+	}
+	
+	void ButtonOnMouseOver(){
+		Debug.Log ("Button1 got focus");
 	}
 }
