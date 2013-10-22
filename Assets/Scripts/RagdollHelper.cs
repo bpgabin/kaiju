@@ -22,6 +22,8 @@ Perhaps there could be an editor script that precomputes the needed information.
 */
 
 public class RagdollHelper : MonoBehaviour {
+	int times = 0;
+	
 	//public property that can be set to toggle between ragdolled and animated character
 	public bool ragdolled
 	{
@@ -68,6 +70,8 @@ public class RagdollHelper : MonoBehaviour {
 					else{
 						anim.SetBool("GetUpFromBelly", true);
 					}
+					
+					times = 10;
 				} //if (state==RagdollState.ragdolled)
 			}	//if value==false	
 		} //set
@@ -152,9 +156,13 @@ public class RagdollHelper : MonoBehaviour {
 	void LateUpdate()
 	{
 		//Clear the get up animation controls so that we don't end up repeating the animations indefinitely
-		anim.SetBool("GetUpFromBelly",false);
-		anim.SetBool("GetUpFromBack",false);
-
+		if(times > 0){
+			times--;
+		}
+		else{
+			anim.SetBool("GetUpFromBelly",false);
+			anim.SetBool("GetUpFromBack",false);
+		}
 		//Blending from ragdoll back to animated
 		if (state==RagdollState.blendToAnim)
 		{

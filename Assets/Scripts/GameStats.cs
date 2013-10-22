@@ -6,6 +6,7 @@ public class GameStats : MonoBehaviour {
 	int buildingsDestroyed = 0;
 	int timesFallen = 0;
 	float longestRun = -1.0f;
+	float startTime = -1.0f;
 	
 	// Accessors
 	public int getBuildingsDestroyed(){
@@ -18,6 +19,10 @@ public class GameStats : MonoBehaviour {
 	
 	public float getLongestRun(){
 		return longestRun;
+	}
+	
+	public float getStartTime(){
+		return startTime;	
 	}
 	
 	// Modifiers
@@ -33,5 +38,9 @@ public class GameStats : MonoBehaviour {
 		if(runTime > longestRun){
 			longestRun = runTime;	
 		}
+	}
+	
+	public void startGame(){
+		startTime = Time.time;
 	}
 }

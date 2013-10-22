@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour {
 	AudioSource soundHighlight;
 	GameStats stats;
 	float endTime;
+	bool showTutorial = true;
 	
 	void Start(){
 		DontDestroyOnLoad(gameObject);
@@ -30,11 +31,7 @@ public class MainMenu : MonoBehaviour {
 	}
 	
 	void Update(){
-		if(stats == null && currentState == menuState.game){
-			GameObject statsObject = GameObject.Find("GameStats");
-			if(statsObject != null)
-				stats = statsObject.GetComponent<GameStats>();	
-		}
+		
 		
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			if(currentState == menuState.game){
@@ -46,48 +43,47 @@ public class MainMenu : MonoBehaviour {
 				currentState = menuState.game;
 			}
 		}
-		if(Input.GetKeyDown(KeyCode.A)){
-			Time.timeScale = 0;
-			currentState = menuState.score;
-			endTime = Time.timeSinceLevelLoad;
+		
+		if(currentState == menuState.blank && Time.timeSinceLevelLoad > 1.0f){
+			if(stats == null && currentState == menuState.blank){
+			GameObject statsObject = GameObject.Find("GameStats");
+			if(statsObject != null)
+				stats = statsObject.GetComponent<GameStats>();	
+			}
+			if(stats.getStartTime() != -1.0f){
+				currentState = menuState.game;
+			}
 		}
+	}
+	
+	public void EndGame(){
+		Time.timeScale = 0;
+		currentState = menuState.score;
+		endTime = Time.timeSinceLevelLoad;
 	}
 	
 	void OnGUI(){
 		GUI.skin = mySkin;
+		float tempTime = 0;
 		switch(currentState){
 		case menuState.mainMenu:
-			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 400));
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 100, 100, 400));
 				GUILayout.BeginVertical();
-					GUILayout.Box("KAIJU");
-					GUILayout.BeginHorizontal();
-					if(GUILayout.Button(new GUIContent("Robot", "Button"))){
+					if(GUILayout.Button(new GUIContent("Start", "Button"))){
 						Application.LoadLevel("Neo_Tokyo");
 						soundSelect.Play();
 						gameScene = gameScenes.robotMode;
-						currentState = menuState.game;
+						currentState = menuState.blank;
 					}
-					if(GUILayout.Button(new GUIContent("Monster", "Button"))){
-						soundSelect.Play();
-					}
-				GUILayout.EndHorizontal();
-				GUILayout.BeginHorizontal();
-					GUILayout.FlexibleSpace();
-					if(GUILayout.Button(new GUIContent("Options", "Button"), GUILayout.Width(100))){
+					if(GUILayout.Button(new GUIContent("Options", "Button"))){
 						currentState = menuState.optionsMenu;
 						soundSelect.Play();
 					}
-				GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-			GUILayout.BeginHorizontal();
-				GUILayout.FlexibleSpace();
-				if(GUILayout.Button(new GUIContent("Credits", "Button"), GUILayout.Width(100))){
-					soundSelect.Play();	
-					currentState = menuState.credits;
-				}
-				GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-			GUILayout.EndVertical();
+					if(GUILayout.Button(new GUIContent("Credits", "Button"))){
+						soundSelect.Play();	
+						currentState = menuState.credits;
+					}
+				GUILayout.EndVertical();
 			GUILayout.EndArea();
 			break;
 		case menuState.optionsMenu:
@@ -114,9 +110,28 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.EndArea();
 			break;
 		case menuState.credits:
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 400));
+				GUILayout.BeginVertical();
+					GUILayout.Box("Credits");
+					GUILayout.Box ("Brian Gabin");
+					GUILayout.Box ("Ruben Telles");
+					GUILayout.Box ("Victor Nguyen");
+					GUILayout.Box ("Chase Khamashta");
+					GUILayout.BeginHorizontal();
+						GUILayout.FlexibleSpace();
+						if(GUILayout.Button(new GUIContent("Return", "Button"), GUILayout.Width(100))){
+							currentState = menuState.mainMenu;
+							soundSelect.Play();
+						}
+						GUILayout.FlexibleSpace();
+					GUILayout.EndHorizontal();
+				GUILayout.EndVertical();
+			GUILayout.EndArea();
 			break;
+		// During Gameplay Menu
 		case menuState.game:
-			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 25, 50, 20));
+			// Menu button that accesses the pause menu.
+			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 25, 50, 25));
 				if(GUILayout.Button(new GUIContent("Menu", "Button"))){
 					Time.timeScale = 0;
 					currentState = menuState.pauseMenu;
@@ -124,19 +139,36 @@ public class MainMenu : MonoBehaviour {
 				}
 			GUILayout.EndArea();
 			
+			// For robot mode there's simply a timer which counts upwards
 			if(gameScene == gameScenes.robotMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						GUILayout.Box("Time: " + string.Format(Math.Floor(Time.timeSinceLevelLoad / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(Time.timeSinceLevelLoad / 60), Time.timeSinceLevelLoad - Math.Floor(Time.timeSinceLevelLoad / 60) * 60));
+						tempTime = Time.time - stats.getStartTime();
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", (tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
+					GUILayout.EndVertical();
+				GUILayout.EndArea();
+			}
+			
+			// Tutorial Tooltip
+			if(showTutorial){
+				GUILayout.BeginArea(new Rect(5, Screen.height - 100, 200, 100));
+					GUILayout.BeginVertical();
+						GUILayout.Box("Stepping: Q and R\nTurning: Hold W and R\nSprinting: Hold Space and step\nRecover: Press S");
+						if(GUILayout.Button(new GUIContent("Dismiss", "Button"))){
+							soundSelect.Play();
+							showTutorial = false;
+						}
 					GUILayout.EndVertical();
 				GUILayout.EndArea();
 			}
 			break;
+			
 		case menuState.pauseMenu:
 			if(gameScene == gameScenes.robotMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						GUILayout.Box("Time: " + string.Format(Math.Floor(Time.timeSinceLevelLoad / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(Time.timeSinceLevelLoad / 60), Time.timeSinceLevelLoad - Math.Floor(Time.timeSinceLevelLoad / 60) * 60));
+						tempTime = Time.time - stats.getStartTime();
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", (tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();	
 			}
@@ -199,6 +231,7 @@ public class MainMenu : MonoBehaviour {
 						currentState = menuState.game;
 						soundSelect.Play();
 						stats = null;
+						Time.timeScale = 1;
 					}
 					if(GUILayout.Button(new GUIContent("Main Menu", "Button"))){
 						Application.LoadLevel("MainMenu");

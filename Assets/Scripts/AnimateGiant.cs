@@ -8,7 +8,7 @@ public class AnimateGiant : MonoBehaviour {
 	Animator anim;
 	AudioSource soundHydraulic;
 	AudioSource soundFootstep;
-	AudioSource soundSprint;
+	//AudioSource soundSprint;
 	AudioSource soundPowerDown;
 	AudioSource soundPowerUp;
 	
@@ -21,6 +21,7 @@ public class AnimateGiant : MonoBehaviour {
 	float cadenceTime = 0.25f;
 	float startRunTime = 3.0f;
 	float timeWhenRunStarted = 0;
+	float timeFell;
 	
 	RagdollHelper helper;
 	
@@ -30,7 +31,7 @@ public class AnimateGiant : MonoBehaviour {
 		
 		soundHydraulic = audioSources[0];
 		soundFootstep = audioSources[1];
-		soundSprint = audioSources[2];
+		//soundSprint = audioSources[2];
 		soundPowerDown = audioSources[3];
 		soundPowerUp = audioSources[4];
 		
@@ -55,7 +56,10 @@ public class AnimateGiant : MonoBehaviour {
 	void Update () {
 		AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(1);
 		
-		if(helper.ragdolled == true && Input.GetKeyDown(KeyCode.S)){
+		if(Time.timeSinceLevelLoad > 3.0f){
+			if(stats.getStartTime() != -1.0f){
+		
+		if(helper.ragdolled == true && Input.GetKeyDown(KeyCode.S) && Time.time - timeFell > 5.0f){
 			helper.ragdolled = false;
 			soundPowerUp.Play();
 		}
@@ -90,16 +94,20 @@ public class AnimateGiant : MonoBehaviour {
 					}
 					else if(running && (lastRunButton == 1 || (Time.time - lastStepTime > cadenceTime))){
 						running = false;
-						anim.SetBool("Running", false);
 						helper.ragdolled = true;
+						anim.SetBool("Running", false);
+						timeFell = Time.time;
 						soundPowerDown.Play();
 						stats.increaseTimesFallen();
 						stats.checkRunTime(Time.time - timeWhenRunStarted);
 					}
 				}
 				else if(running){
-					if(Time.time - lastStepTime > cadenceTime)
+					if(Time.time - lastStepTime > cadenceTime){
 						helper.ragdolled = true;
+						soundPowerDown.Play();
+						timeFell = Time.time;
+					}
 					running = false;
 					anim.SetBool("Running", false);
 					stats.checkRunTime(Time.time - timeWhenRunStarted);
@@ -133,8 +141,9 @@ public class AnimateGiant : MonoBehaviour {
 					}
 					else if(running && (lastRunButton == 2 || (Time.time - lastStepTime > cadenceTime))){
 						running = false;
-						anim.SetBool("Running", false);
 						helper.ragdolled = true;
+						anim.SetBool("Running", false);
+						timeFell = Time.time;
 						soundPowerDown.Play();
 						stats.increaseTimesFallen();
 						stats.checkRunTime(Time.time - timeWhenRunStarted);
@@ -158,8 +167,9 @@ public class AnimateGiant : MonoBehaviour {
 			}
 			else if(running && (Time.time - lastStepTime) > cadenceTime){
 				running = false;
-				anim.SetBool("Running", false);
 				helper.ragdolled = true;
+				anim.SetBool("Running", false);
+				timeFell = Time.time;
 				soundPowerDown.Play();
 				stats.increaseTimesFallen();
 				stats.checkRunTime(Time.time - timeWhenRunStarted);
@@ -172,6 +182,8 @@ public class AnimateGiant : MonoBehaviour {
 			}
 			anim.SetBool("LeftStep", false);
 			anim.SetBool("RightStep", false);
+		}
+			}
 		}
 	}
 }
