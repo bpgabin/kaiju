@@ -7,6 +7,9 @@ public class AnimateGiant : MonoBehaviour {
 	Animator anim;
 	AudioSource soundHydraulic;
 	AudioSource soundFootstep;
+	AudioSource soundSprint;
+	AudioSource soundPowerDown;
+	AudioSource soundPowerUp;
 	
 	int lastState;
 	bool stepping = false;
@@ -25,6 +28,9 @@ public class AnimateGiant : MonoBehaviour {
 		
 		soundHydraulic = audioSources[0];
 		soundFootstep = audioSources[1];
+		soundSprint = audioSources[2];
+		soundPowerDown = audioSources[3];
+		soundPowerUp = audioSources[4];
 		
 		helper = GetComponent<RagdollHelper>();
 		
@@ -47,6 +53,7 @@ public class AnimateGiant : MonoBehaviour {
 		
 		if(helper.ragdolled == true && Input.GetKeyDown(KeyCode.S)){
 			helper.ragdolled = false;
+			soundPowerUp.Play();
 		}
 		
 		if(	stateInfo.nameHash == Animator.StringToHash("Legs.RobotLeftStepStill") ||
@@ -80,6 +87,7 @@ public class AnimateGiant : MonoBehaviour {
 						running = false;
 						anim.SetBool("Running", false);
 						helper.ragdolled = true;
+						soundPowerDown.Play();
 					}
 				}
 				else if(running){
@@ -118,6 +126,7 @@ public class AnimateGiant : MonoBehaviour {
 						running = false;
 						anim.SetBool("Running", false);
 						helper.ragdolled = true;
+						soundPowerDown.Play();
 					}
 				}
 				else if(Input.GetKey(KeyCode.W))
@@ -140,6 +149,7 @@ public class AnimateGiant : MonoBehaviour {
 				running = false;
 				anim.SetBool("Running", false);
 				helper.ragdolled = true;
+				soundPowerDown.Play();
 			}
 		}
 		else{
