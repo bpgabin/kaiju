@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour {
 	public GUISkin mySkin;
@@ -12,8 +12,23 @@ public class MainMenu : MonoBehaviour {
 	menuState currentState = menuState.mainMenu;
 	
 	void Start(){
-		if(gameScene != gameScenes.none)
+		if(gameScene != gameScenes.none){
 			currentState = menuState.game;
+			gameObject.AddComponent("GameStats");
+		}
+	}
+	
+	void Update(){
+		if(Input.GetKeyDown(KeyCode.Escape)){
+			if(currentState == menuState.game){
+				Time.timeScale = 0;
+				currentState = menuState.pauseMenu;
+			}
+			else if(currentState == menuState.pauseMenu || currentState == menuState.pauseOptions){
+				Time.timeScale = 1;
+				currentState = menuState.game;
+			}
+		}
 	}
 	
 	void OnGUI(){
@@ -71,12 +86,30 @@ public class MainMenu : MonoBehaviour {
 		case menuState.credits:
 			break;
 		case menuState.game:
-			if(GUILayout.Button("Menu")){
-				Time.timeScale = 0;
-				currentState = menuState.pauseMenu;
+			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 25, 50, 20));
+				if(GUILayout.Button("Menu")){
+					Time.timeScale = 0;
+					currentState = menuState.pauseMenu;
+				}
+			GUILayout.EndArea();
+			
+			if(gameScene == gameScenes.robotMode){
+				//GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
+					GUILayout.BeginVertical();
+						GUILayout.Box("Time: " + string.Format(Math.Floor(Time.timeSinceLevelLoad / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(Time.timeSinceLevelLoad / 60), Time.timeSinceLevelLoad - Math.Floor(Time.timeSinceLevelLoad / 60) * 60));
+					GUILayout.EndVertical();
+				//GUILayout.EndArea();
 			}
 			break;
 		case menuState.pauseMenu:
+			if(gameScene == gameScenes.robotMode){
+				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
+					GUILayout.BeginVertical();
+						GUILayout.Box("Time: " + string.Format("{0:0.00}", Time.timeSinceLevelLoad));
+					GUILayout.EndVertical();
+				GUILayout.EndArea();	
+			}
+			
 			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height - 200, 200, 400));
 				GUILayout.BeginVertical();	
 					GUILayout.Box("Paused");
@@ -88,6 +121,7 @@ public class MainMenu : MonoBehaviour {
 						currentState = menuState.pauseOptions;
 					}
 					if(GUILayout.Button("Main Menu")){
+						Time.timeScale = 1;
 						Application.LoadLevel("MainMenu");
 					}
 				GUILayout.EndVertical();
