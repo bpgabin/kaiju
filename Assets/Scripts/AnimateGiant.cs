@@ -56,6 +56,10 @@ public class AnimateGiant : MonoBehaviour {
 	void Update () {
 		AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(1);
 		
+		// player slips if they go up too fast
+		if (this.rigidbody.velocity.y > 1f)
+			helper.ragdolled = true;
+		
 		if(Time.timeSinceLevelLoad > 3.0f){
 			if(stats.getStartTime() != -1.0f){
 		
