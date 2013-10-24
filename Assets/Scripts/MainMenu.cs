@@ -253,6 +253,7 @@ public class MainMenu : MonoBehaviour {
 					if(gameScene == gameScenes.robotMode)		
 						GUILayout.Box("Time Elapsed: " + string.Format(Math.Floor(endTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(endTime / 60), endTime - Math.Floor(endTime / 60) * 60));
 					GUILayout.Box("Buildings Destroyed: " + stats.getBuildingsDestroyed());
+					GUILayout.Box("Cars Destroyed: " + stats.getCarsDestroyed());
 					GUILayout.Box("Times Fallen: " + stats.getTimesFallen());
 					if(stats.getLongestRun() > -1)
 						GUILayout.Box("Longest Run Time: " + string.Format("{0:0.00}", stats.getLongestRun()));
