@@ -59,7 +59,7 @@ public class AnimateGiant : MonoBehaviour {
 		if(Time.timeSinceLevelLoad > 3.0f){
 			if(stats.getStartTime() != -1.0f){
 		
-		if(helper.ragdolled == true && Input.GetKeyDown(KeyCode.S) && Time.time - timeFell > 5.0f){
+		if(helper.ragdolled == true && Input.GetKeyDown(KeyCode.S) && Time.time - timeFell > 3.0f){
 			helper.ragdolled = false;
 			soundPowerUp.Play();
 		}

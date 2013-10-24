@@ -153,7 +153,7 @@ public class MainMenu : MonoBehaviour {
 			if(showTutorial){
 				GUILayout.BeginArea(new Rect(5, Screen.height - 100, 200, 100));
 					GUILayout.BeginVertical();
-						GUILayout.Box("Stepping: Q and R\nTurning: Hold W and R\nSprinting: Hold Space and step\nRecover: Press S");
+						GUILayout.Box("Stepping: Q and R\nTurning: Hold W and E\nSprinting: Hold Space and step\nRecover: Press S");
 						if(GUILayout.Button(new GUIContent("Dismiss", "Button"))){
 							soundSelect.Play();
 							showTutorial = false;
