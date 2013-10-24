@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour {
 	
 	public enum gameScenes {none, robotMode, monsterMode};
 	public gameScenes gameScene = gameScenes.none;
-	
+	public float monsterTimeAllowed = 120.0f;
 	public AudioSource[] audioSources;
 	
 	enum menuState {mainMenu, optionsMenu, credits, pauseMenu, pauseOptions, game, score, blank};
@@ -23,15 +23,15 @@ public class MainMenu : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 		soundSelect = audioSources[0];
 		soundHighlight = audioSources[1];
-		
-		if(gameScene != gameScenes.none){
-			currentState = menuState.game;
-			gameObject.AddComponent("GameStats");
-		}
 	}
 	
 	void Update(){
-		
+		if(currentState == menuState.game && gameScene == gameScenes.monsterMode){
+			float tempTime = monsterTimeAllowed - (Time.time - stats.getStartTime());
+			if(tempTime <= 0){
+				EndGame();	
+			}
+		}
 		
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			if(currentState == menuState.game){
@@ -54,12 +54,14 @@ public class MainMenu : MonoBehaviour {
 				currentState = menuState.game;
 			}
 		}
+		
 	}
 	
 	public void EndGame(){
 		Time.timeScale = 0;
 		currentState = menuState.score;
-		endTime = Time.timeSinceLevelLoad;
+		float tempTime = Time.time - stats.getStartTime();
+		endTime = tempTime;
 	}
 	
 	void OnGUI(){
@@ -69,10 +71,16 @@ public class MainMenu : MonoBehaviour {
 		case menuState.mainMenu:
 			GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 100, 100, 400));
 				GUILayout.BeginVertical();
-					if(GUILayout.Button(new GUIContent("Start", "Button"))){
+					if(GUILayout.Button(new GUIContent("Robot", "Button"))){
 						Application.LoadLevel("Neo_Tokyo");
 						soundSelect.Play();
 						gameScene = gameScenes.robotMode;
+						currentState = menuState.blank;
+					}
+					if(GUILayout.Button(new GUIContent("Monster", "Button"))){
+						Application.LoadLevel("TokyoMonster");
+						soundSelect.Play();
+						gameScene = gameScenes.monsterMode;
 						currentState = menuState.blank;
 					}
 					if(GUILayout.Button(new GUIContent("Options", "Button"))){
@@ -144,7 +152,17 @@ public class MainMenu : MonoBehaviour {
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
 						tempTime = Time.time - stats.getStartTime();
-						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", (tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
+					GUILayout.EndVertical();
+				GUILayout.EndArea();
+			}
+			
+			// For monster mode the timer counts down
+			if(gameScene == gameScenes.monsterMode){
+				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
+					GUILayout.BeginVertical();
+						tempTime = monsterTimeAllowed - (Time.time - stats.getStartTime());
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();
 			}
@@ -164,11 +182,22 @@ public class MainMenu : MonoBehaviour {
 			break;
 			
 		case menuState.pauseMenu:
+			// Pause timer for robot
 			if(gameScene == gameScenes.robotMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
 						tempTime = Time.time - stats.getStartTime();
-						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", (tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
+					GUILayout.EndVertical();
+				GUILayout.EndArea();	
+			}
+			
+			// Pause timer for monster
+			if(gameScene == gameScenes.monsterMode){
+				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
+					GUILayout.BeginVertical();
+						tempTime = monsterTimeAllowed - (Time.time - stats.getStartTime());
+						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();	
 			}
@@ -221,17 +250,29 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 400));
 				GUILayout.BeginVertical();
 					GUILayout.Box("Game Over");
-					GUILayout.Box("Time Elapsed: " + string.Format(Math.Floor(endTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(endTime / 60), endTime - Math.Floor(endTime / 60) * 60));
+					if(gameScene == gameScenes.robotMode)		
+						GUILayout.Box("Time Elapsed: " + string.Format(Math.Floor(endTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(endTime / 60), endTime - Math.Floor(endTime / 60) * 60));
 					GUILayout.Box("Buildings Destroyed: " + stats.getBuildingsDestroyed());
 					GUILayout.Box("Times Fallen: " + stats.getTimesFallen());
 					if(stats.getLongestRun() > -1)
 						GUILayout.Box("Longest Run Time: " + string.Format("{0:0.00}", stats.getLongestRun()));
-					if(GUILayout.Button(new GUIContent("Restart", "Button"))){
-						Application.LoadLevel("Neo_Tokyo");
-						currentState = menuState.game;
-						soundSelect.Play();
-						stats = null;
-						Time.timeScale = 1;
+					if(GUILayout.Button(new GUIContent("Restart", "Button"))){		
+						if(gameScene == gameScenes.robotMode){		
+							Application.LoadLevel("Neo_Tokyo");
+							soundSelect.Play();
+							stats.resetGame();
+							gameScene = gameScenes.robotMode;
+							currentState = menuState.blank;
+							Time.timeScale = 1;
+						}
+						else if(gameScene == gameScenes.monsterMode){
+							Application.LoadLevel("TokyoMonster");
+							soundSelect.Play();
+							stats.resetGame();
+							gameScene = gameScenes.monsterMode;
+							currentState = menuState.blank;
+							Time.timeScale = 1;
+						}
 					}
 					if(GUILayout.Button(new GUIContent("Main Menu", "Button"))){
 						Application.LoadLevel("MainMenu");

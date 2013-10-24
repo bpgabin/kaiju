@@ -43,4 +43,8 @@ public class GameStats : MonoBehaviour {
 	public void startGame(){
 		startTime = Time.time;
 	}
+	
+	public void resetGame(){
+		startTime = -1.0f;	
+	}
 }
