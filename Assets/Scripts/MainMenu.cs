@@ -18,11 +18,17 @@ public class MainMenu : MonoBehaviour {
 	GameStats stats;
 	float endTime;
 	bool showTutorial = true;
+	KongregateAPI kongAPI;
+	
 	
 	void Start(){
 		DontDestroyOnLoad(gameObject);
 		soundSelect = audioSources[0];
 		soundHighlight = audioSources[1];
+		
+		GameObject kongregateAPIObject = GameObject.Find("KongregateAPI");
+		if(kongregateAPIObject != null)
+			kongAPI = kongregateAPIObject.GetComponent<KongregateAPI>();
 	}
 	
 	void Update(){
@@ -44,7 +50,7 @@ public class MainMenu : MonoBehaviour {
 			}
 		}
 		
-		if(currentState == menuState.blank && Time.timeSinceLevelLoad > 1.0f){
+		if(currentState == menuState.blank && Time.timeSinceLevelLoad > 3.0f){
 			if(stats == null && currentState == menuState.blank){
 			GameObject statsObject = GameObject.Find("GameStats");
 			if(statsObject != null)
@@ -57,11 +63,27 @@ public class MainMenu : MonoBehaviour {
 		
 	}
 	
+	// Ends play of the current game.
 	public void EndGame(){
+		// Pause the game and show the scoreboard.
 		Time.timeScale = 0;
 		currentState = menuState.score;
-		float tempTime = Time.time - stats.getStartTime();
-		endTime = tempTime;
+		stats.endGameTime();
+		endTime = stats.getFinalTime();
+		
+		// Report Game Statistics to Kongregate
+		if(kongAPI.isKongregate){
+			if(gameScene == gameScenes.robotMode){
+				kongAPI.SubmitStats("completedRobotMode", 1);
+				kongAPI.SubmitStats("scoreRobot", stats.getScore("robot"));
+				kongAPI.SubmitStats("leastDestroyedBuildingsRobot", stats.getBuildingsDestroyed());
+			}
+			else if(gameScene == gameScenes.monsterMode){
+				kongAPI.SubmitStats("completedMonsterMode", 1);
+				kongAPI.SubmitStats("scoreMonster", stats.getScore("monster"));
+				kongAPI.SubmitStats("mostDestroyedBuildingsMonster", stats.getBuildingsDestroyed());
+			}
+		}
 	}
 	
 	void OnGUI(){
@@ -69,6 +91,13 @@ public class MainMenu : MonoBehaviour {
 		float tempTime = 0;
 		switch(currentState){
 		case menuState.mainMenu:
+			// If on Kongregate display welcome message to user.
+			if(kongAPI != null){
+				if(kongAPI.isKongregate)
+					GUILayout.Box("Welcome " + kongAPI.username + "!");
+				else
+					GUILayout.Box("Kongregate Not Found");
+			}
 			GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 100, 100, 400));
 				GUILayout.BeginVertical();
 					if(GUILayout.Button(new GUIContent("Robot", "Button"))){
@@ -151,7 +180,7 @@ public class MainMenu : MonoBehaviour {
 			if(gameScene == gameScenes.robotMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						tempTime = Time.time - stats.getStartTime();
+						tempTime = stats.getGameTime();
 						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();
@@ -161,7 +190,7 @@ public class MainMenu : MonoBehaviour {
 			if(gameScene == gameScenes.monsterMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						tempTime = monsterTimeAllowed - (Time.time - stats.getStartTime());
+						tempTime = monsterTimeAllowed - stats.getGameTime();
 						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();
@@ -186,7 +215,7 @@ public class MainMenu : MonoBehaviour {
 			if(gameScene == gameScenes.robotMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						tempTime = Time.time - stats.getStartTime();
+						tempTime = stats.getGameTime();
 						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();	
@@ -196,7 +225,7 @@ public class MainMenu : MonoBehaviour {
 			if(gameScene == gameScenes.monsterMode){
 				GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, 0, 100, 100));
 					GUILayout.BeginVertical();
-						tempTime = monsterTimeAllowed - (Time.time - stats.getStartTime());
+						tempTime = monsterTimeAllowed - stats.getGameTime();
 						GUILayout.Box("Time: " + string.Format(Math.Floor(tempTime / 60) > 0 ? "{0:0}:{1:00.00}" : "{1:0.00}", Math.Floor(tempTime / 60), tempTime - Math.Floor(tempTime / 60) * 60));
 					GUILayout.EndVertical();
 				GUILayout.EndArea();	
@@ -257,6 +286,10 @@ public class MainMenu : MonoBehaviour {
 					GUILayout.Box("Times Fallen: " + stats.getTimesFallen());
 					if(stats.getLongestRun() > -1)
 						GUILayout.Box("Longest Run Time: " + string.Format("{0:0.00}", stats.getLongestRun()));
+					if(gameScene == gameScenes.robotMode)
+						GUILayout.Box("Score: " + stats.getScore("robot"));
+					else if(gameScene == gameScenes.monsterMode)
+						GUILayout.Box("Score: " + stats.getScore("monster"));
 					if(GUILayout.Button(new GUIContent("Restart", "Button"))){		
 						if(gameScene == gameScenes.robotMode){		
 							Application.LoadLevel("Neo_Tokyo");
