@@ -4,6 +4,7 @@ using System.Collections;
 public class GameStats : MonoBehaviour {
 	// Game stats being tracked
 	int buildingsDestroyed = 0;
+	int monsterBuildingsDestroyed = 0;
 	int timesFallen = 0;
 	int carsDestroyed = 0;
 	float longestRun = -1.0f;
@@ -13,6 +14,10 @@ public class GameStats : MonoBehaviour {
 	// Accessors
 	public int getBuildingsDestroyed(){
 		return buildingsDestroyed;	
+	}
+	
+	public int getMonsterBuildingsDestroyed(){
+		return monsterBuildingsDestroyed;
 	}
 	
 	public int getTimesFallen(){
@@ -101,6 +106,10 @@ public class GameStats : MonoBehaviour {
 		buildingsDestroyed++;	
 	}
 	
+	public void inscreaseMonsterBuildingsDestroyed(){
+		monsterBuildingsDestroyed++;
+	}
+	
 	public void increaseTimesFallen(){
 		timesFallen++;	
 	}
@@ -118,6 +127,7 @@ public class GameStats : MonoBehaviour {
 	public void resetGame(){
 		startTime = -1.0f;
 		buildingsDestroyed = 0;
+		monsterBuildingsDestroyed = 0;
 		carsDestroyed = 0;
 		timesFallen = 0;
 		longestRun = -1.0f;

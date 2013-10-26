@@ -3,6 +3,8 @@ using System.Collections;
 
 public class AttackingMonster : MonoBehaviour {
 	Animator anim;
+	GameObject building;
+	public float rotationSpeed = 2.0f;
 	
 	// Use this for initialization
 	void Start () {
@@ -16,10 +18,18 @@ public class AttackingMonster : MonoBehaviour {
 				newPosition.y = Mathf.Max(newPosition.y, hit.point.y);
 			}
 		}
-		
 		transform.position = newPosition;
-		
+		pickNewBuilding();
 		anim.SetBool("Walk", true);
+	}
+	
+	void Update() {
+		if(building == null)
+			pickNewBuilding();
+		
+		Vector3 direction = (building.transform.position - transform.position).normalized;
+		Quaternion lookRotation = Quaternion.LookRotation(direction);
+		transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);	
 	}
 	
 	void OnCollisionEnter(Collision other){
@@ -28,8 +38,19 @@ public class AttackingMonster : MonoBehaviour {
 			MainMenu menu = menuObject.GetComponent<MainMenu>();
 			menu.EndGame();
 		}
-		else if(other.gameObject.name == "Building"){
-			anim.SetBool("Walk", false);	
+		else if(other.gameObject.tag == "Building"){
+			if(other.gameObject == building){
+				pickNewBuilding();
+			}
+		}
+	}
+	
+	void pickNewBuilding(){
+		GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+		if(buildings.Length != 0){
+			int bNum = Random.Range(0, buildings.Length);
+			GameObject newBuilding = buildings[bNum];
+			building = newBuilding;
 		}
 	}
 }

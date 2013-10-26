@@ -8,8 +8,6 @@ public class AttackingRobot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		
 		Vector3 direction = (monster.position - transform.position).normalized;
 		Quaternion lookRotation = Quaternion.LookRotation(direction);
 		transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);

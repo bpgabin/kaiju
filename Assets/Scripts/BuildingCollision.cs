@@ -17,17 +17,10 @@ public class BuildingCollision : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision other){	
 		if(other.gameObject.tag == "Player"){
-			stats.increaseBuildingsDestroyed();
-			collider.enabled = false;
-			renderer.enabled = false;
-			particleSystem.Play();
-			audio.Play();
+			DestroyImmediate(gameObject);
 		}
 		else if(other.gameObject.tag == "Monster"){
-			collider.enabled = false;
-			renderer.enabled = false;
-			particleSystem.Play();
-			audio.Play();
+			Destroy(gameObject);
 		}
 	}
 }
