@@ -37,6 +37,7 @@ public class RagdollHelper : MonoBehaviour {
 					//setKinematic(false); //allow the ragdoll RigidBodies to react to the environment
 					anim.enabled = false; //disable animation
 					state=RagdollState.ragdolled;
+					collider.enabled = false;
 				} 
 			}
 			else {
@@ -45,6 +46,7 @@ public class RagdollHelper : MonoBehaviour {
 					//setKinematic(true); //disable gravity etc.
 					ragdollingEndTime = Time.time; //store the state change time
 					anim.enabled = true; //enable animation
+					collider.enabled = true;
 					state=RagdollState.blendToAnim;  
 					
 					//Store the ragdolled position for blending

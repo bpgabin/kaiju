@@ -19,18 +19,12 @@ public class CarCollision : MonoBehaviour {
 	void OnCollisionEnter(Collision other){	
 		if(other.gameObject.tag == "Player"){
 			stats.increaseCarsDestroyed();
-			collider.enabled = false;
-			renderer.enabled = false;
-			//particleSystem.Play();
-			soundExplosion.Play();
-			soundSiren.Stop();
+			AudioSource.PlayClipAtPoint(soundExplosion.clip, transform.position);
+			Destroy(gameObject);
 		}
 		else if(other.gameObject.tag == "Monster"){
-			collider.enabled = false;
-			renderer.enabled = false;
-			//particleSystem.Play();
-			soundExplosion.Play();
-			soundSiren.Stop();
+			AudioSource.PlayClipAtPoint(soundExplosion.clip, transform.position);
+			Destroy(gameObject);
 		}
 	}
 }

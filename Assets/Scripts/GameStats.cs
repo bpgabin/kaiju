@@ -110,10 +110,6 @@ public class GameStats : MonoBehaviour {
 	public void inscreaseMonsterBuildingsDestroyed(){
 		monsterBuildingsDestroyed++;
 	}
-		
-	public void increaseBuildingsDestroyedValue(int value){
-		buildingsDestroyedValue += value;	
-	}
 	
 	public void increaseTimesFallen(){
 		timesFallen++;	
