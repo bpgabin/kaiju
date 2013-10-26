@@ -75,13 +75,13 @@ public class MainMenu : MonoBehaviour {
 		if(kongAPI.isKongregate){
 			if(gameScene == gameScenes.robotMode){
 				kongAPI.SubmitStats("completedRobotMode", 1);
-				kongAPI.SubmitStats("scoreRobot", stats.getScore("robot"));
-				kongAPI.SubmitStats("leastDestroyedBuildingsRobot", stats.getBuildingsDestroyed());
+				kongAPI.SubmitStats("robotScore", stats.getScore("robot"));
+				kongAPI.SubmitStats("leastBuildingsDestroyedRobot", stats.getBuildingsDestroyed());
 			}
 			else if(gameScene == gameScenes.monsterMode){
 				kongAPI.SubmitStats("completedMonsterMode", 1);
-				kongAPI.SubmitStats("scoreMonster", stats.getScore("monster"));
-				kongAPI.SubmitStats("mostDestroyedBuildingsMonster", stats.getBuildingsDestroyed());
+				kongAPI.SubmitStats("monsterScore", stats.getScore("monster"));
+				kongAPI.SubmitStats("mostBuildingsDestroyedMonster", stats.getBuildingsDestroyed());
 			}
 		}
 	}
