@@ -174,16 +174,16 @@ ModelImporter:
     clipAnimations:
     - name: JogForward_NtrlFaceFwd
       takeName: _12_a_U1_M_P_JogForward_NtrlFaceFwd__Fb_p0_No_0_PJ_3
-      firstFrame: 28
-      lastFrame: 511
+      firstFrame: 55
+      lastFrame: 76
       wrapMode: 0
-      orientationOffsetY: 0
+      orientationOffsetY: -3.74000001
       level: 0
       cycleOffset: 0
       loop: 0
       loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
