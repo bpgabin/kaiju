@@ -23,6 +23,7 @@ public class CarCollision : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		else if(other.gameObject.tag == "Monster"){
+			stats.increaseCarsDestroyed();
 			AudioSource.PlayClipAtPoint(soundExplosion.clip, transform.position);
 			Destroy(gameObject);
 		}

@@ -28,6 +28,8 @@ public class BuildingCollision : MonoBehaviour {
 		else if(other.gameObject.tag == "Monster"){
 			stats.inscreaseMonsterBuildingsDestroyed();
 			AudioSource.PlayClipAtPoint(soundCrash, transform.position);
+			GameObject newDestruct = (GameObject)Instantiate(buildingDestruct, transform.position, transform.rotation);
+			newDestruct.transform.localScale = transform.localScale;
 			Destroy(gameObject);
 		}
 	}
