@@ -17,7 +17,7 @@ public class BuildingCollision : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision other){	
 		if(other.gameObject.tag == "Player"){
-			DestroyImmediate(gameObject);
+			Destroy(gameObject);
 		}
 		else if(other.gameObject.tag == "Monster"){
 			Destroy(gameObject);

@@ -107,13 +107,12 @@ public class GameStats : MonoBehaviour {
 		buildingsDestroyed++;	
 	}
 	
-<<<<<<< HEAD
 	public void inscreaseMonsterBuildingsDestroyed(){
 		monsterBuildingsDestroyed++;
-=======
+	}
+		
 	public void increaseBuildingsDestroyedValue(int value){
 		buildingsDestroyedValue += value;	
->>>>>>> Adding scoring for robot and monster modes
 	}
 	
 	public void increaseTimesFallen(){
