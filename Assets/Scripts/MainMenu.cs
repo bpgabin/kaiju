@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour {
 	public float monsterTimeAllowed = 120.0f;
 	public AudioSource[] audioSources;
 	
-	enum menuState {mainMenu, optionsMenu, credits, pauseMenu, pauseOptions, game, score, blank};
+	enum menuState {mainMenu, optionsMenu, credits, instructions, pauseMenu, pauseOptions, game, score, blank};
 	menuState currentState = menuState.mainMenu;
 	string lastTooltip = "";
 	AudioSource soundSelect;
@@ -18,17 +18,12 @@ public class MainMenu : MonoBehaviour {
 	GameStats stats;
 	float endTime;
 	bool showTutorial = true;
-	KongregateAPI kongAPI;
-	
+	public KongregateAPI kongAPI;
 	
 	void Start(){
 		DontDestroyOnLoad(gameObject);
 		soundSelect = audioSources[0];
 		soundHighlight = audioSources[1];
-		
-		GameObject kongregateAPIObject = GameObject.Find("KongregateAPI");
-		if(kongregateAPIObject != null)
-			kongAPI = kongregateAPIObject.GetComponent<KongregateAPI>();
 	}
 	
 	void Update(){
@@ -60,7 +55,6 @@ public class MainMenu : MonoBehaviour {
 				currentState = menuState.game;
 			}
 		}
-		
 	}
 	
 	// Ends play of the current game.
@@ -92,13 +86,11 @@ public class MainMenu : MonoBehaviour {
 		switch(currentState){
 		case menuState.mainMenu:
 			// If on Kongregate display welcome message to user.
-			if(kongAPI != null){
-				if(kongAPI.isKongregate)
-					GUILayout.Box("Welcome " + kongAPI.username + "!");
-				else
-					GUILayout.Box("Kongregate Not Found");
-			}
-			GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 100, 100, 400));
+			if(kongAPI.isKongregate)
+				GUILayout.Box("Welcome " + kongAPI.username + "!");
+			else
+				GUILayout.Box("Connecting to Kongregate..");
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 120, 100, 400));
 				GUILayout.BeginVertical();
 					if(GUILayout.Button(new GUIContent("Robot", "Button"))){
 						Application.LoadLevel("Neo_Tokyo");
@@ -112,6 +104,10 @@ public class MainMenu : MonoBehaviour {
 						gameScene = gameScenes.monsterMode;
 						currentState = menuState.blank;
 					}
+					if(GUILayout.Button (new GUIContent("Tutorial", "Button"))){
+						soundSelect.Play();
+						currentState = menuState.instructions;
+					}
 					if(GUILayout.Button(new GUIContent("Options", "Button"))){
 						currentState = menuState.optionsMenu;
 						soundSelect.Play();
@@ -123,8 +119,43 @@ public class MainMenu : MonoBehaviour {
 				GUILayout.EndVertical();
 			GUILayout.EndArea();
 			break;
+		case menuState.instructions:
+			// If on Kongregate display welcome message to user.
+			if(kongAPI.isKongregate)
+				GUILayout.Box("Welcome " + kongAPI.username + "!");
+			else
+				GUILayout.Box("Connecting to Kongregate..");
+			// robot Instructions
+			GUILayout.BeginArea(new Rect(0, Screen.height - 100, 300, 400));
+			GUILayout.Box("Goal: Catch the Monster without destroying Tokyo.\nPoints: Low times and less destruction.");
+			GUILayout.EndArea();
+			
+			// monster Instructions
+			GUILayout.BeginArea(new Rect(Screen.width - 300, Screen.height - 100, 300, 200));
+			GUILayout.Box("Goal: Destroy Tokyo before the robot gets you.\nPoints: Higher times and mass destruction.");
+			GUILayout.EndArea();
+			
+			
+			// return button
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 150, Screen.height / 2 + 120, 300, 200));
+			GUILayout.Box("Walk: Alternate Q and R.\nTurn: Hold either W or E while walking.\nSprint: Hold Spacebar while rapidly walking.\nGet-up: Press S.");
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			if(GUILayout.Button(new GUIContent("Main Menu", "Button"), GUILayout.Width(100))){
+				soundSelect.Play();
+				currentState = menuState.mainMenu;
+			}
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
+			break;
 		case menuState.optionsMenu:
-			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 200));
+			// If on Kongregate display welcome message to user.
+			if(kongAPI.isKongregate)
+				GUILayout.Box("Welcome " + kongAPI.username + "!");
+			else
+				GUILayout.Box("Connecting to Kongregate..");
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 120, 200, 200));
 			GUILayout.BeginVertical();
 			
 			GUILayout.BeginHorizontal();
@@ -147,9 +178,13 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.EndArea();
 			break;
 		case menuState.credits:
-			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 400));
+			// If on Kongregate display welcome message to user.
+			if(kongAPI.isKongregate)
+				GUILayout.Box("Welcome " + kongAPI.username + "!");
+			else
+				GUILayout.Box("Connecting to Kongregate..");
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 200, 400));
 				GUILayout.BeginVertical();
-					GUILayout.Box("Credits");
 					GUILayout.Box ("Brian Gabin");
 					GUILayout.Box ("Ruben Telles");
 					GUILayout.Box ("Victor Nguyen");
@@ -168,7 +203,7 @@ public class MainMenu : MonoBehaviour {
 		// During Gameplay Menu
 		case menuState.game:
 			// Menu button that accesses the pause menu.
-			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 25, 50, 25));
+			GUILayout.BeginArea(new Rect(Screen.width - 55, Screen.height - 30, 50, 25));
 				if(GUILayout.Button(new GUIContent("Menu", "Button"))){
 					Time.timeScale = 0;
 					currentState = menuState.pauseMenu;
@@ -198,7 +233,7 @@ public class MainMenu : MonoBehaviour {
 			
 			// Tutorial Tooltip
 			if(showTutorial){
-				GUILayout.BeginArea(new Rect(5, Screen.height - 100, 200, 100));
+				GUILayout.BeginArea(new Rect(5, Screen.height - 110, 200, 120));
 					GUILayout.BeginVertical();
 						GUILayout.Box("Stepping: Q and R\nTurning: Hold W and E\nSprinting: Hold Space and step\nRecover: Press S");
 						if(GUILayout.Button(new GUIContent("Dismiss", "Button"))){
@@ -276,7 +311,7 @@ public class MainMenu : MonoBehaviour {
 			GUILayout.EndArea();
 			break;
 		case menuState.score:
-			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 400));
+			GUILayout.BeginArea(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 150, 200, 400));
 				GUILayout.BeginVertical();
 					GUILayout.Box("Game Over");
 					if(gameScene == gameScenes.robotMode)		
