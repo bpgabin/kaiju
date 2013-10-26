@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GameStats : MonoBehaviour {
 	// Game stats being tracked
+	int buildingsDestroyedValue = 0;
 	int buildingsDestroyed = 0;
 	int monsterBuildingsDestroyed = 0;
 	int timesFallen = 0;
@@ -52,16 +53,16 @@ public class GameStats : MonoBehaviour {
 		if(mode == "robot"){
 			// Score Weights
 			float timeScore = 1;
-			float buildingScore = -3;
-			float carScore = -5;
-			float fallScore = -2;
+			float buildingScore = 3;
+			float carScore = 5;
+			float fallScore = 2;
 			
 			// Calculate Score
 			float time = endTime - startTime;
-			score += time * timeScore;
-			score += buildingsDestroyed * buildingScore;
-			score += carsDestroyed * carScore;
-			score += timesFallen * fallScore;
+			float destructionScore = + (buildingScore * buildingsDestroyed) + (carScore * carsDestroyed) + (fallScore * timesFallen);
+			score = 10000;
+			score *= 30/(time + 30);
+			score *= 100/(destructionScore + 100);
 			
 			// Limit the lowest score to zero.
 			if(score < 0)
@@ -71,17 +72,17 @@ public class GameStats : MonoBehaviour {
 		}
 		else if(mode == "monster"){
 			// Score Weights
-			float timeScore = -1;
+			float timeScore = 1;
 			float buildingScore = 3;
 			float carScore = 5;
-			float fallScore = 2;
+			float fallScore = -2;
 			
 			// Calculate Score;
 			float time = endTime - startTime;
-			score += time * timeScore;
-			score += buildingsDestroyed * buildingScore;
-			score += carsDestroyed * carScore;
-			score += timesFallen * fallScore;
+			float destructionScore = + (buildingScore * buildingsDestroyed) + (carScore * carsDestroyed) + (fallScore * timesFallen);
+			
+			score = time * 10;
+			score += destructionScore * 20;
 			
 			// Limit the lowest score to zero.
 			if(score < 0)
@@ -101,13 +102,18 @@ public class GameStats : MonoBehaviour {
 	public void increaseCarsDestroyed(){
 		carsDestroyed++;
 	}
-	
+	 
 	public void increaseBuildingsDestroyed(){
 		buildingsDestroyed++;	
 	}
 	
+<<<<<<< HEAD
 	public void inscreaseMonsterBuildingsDestroyed(){
 		monsterBuildingsDestroyed++;
+=======
+	public void increaseBuildingsDestroyedValue(int value){
+		buildingsDestroyedValue += value;	
+>>>>>>> Adding scoring for robot and monster modes
 	}
 	
 	public void increaseTimesFallen(){
